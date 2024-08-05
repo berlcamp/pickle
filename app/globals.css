@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.app__error_message {
+  @apply mt-1 text-xs text-red-600 font-bold;
+}
