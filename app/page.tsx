@@ -75,8 +75,8 @@ export default function Home() {
             <>
               <div className="bg-yellow-100 p-2 mb-4 text-sm font-mono">
                 3 winners (gold, silver, and bronze) will be selected in each
-                category (Class A and Class B). The organizers will categorize
-                each team to ensure a balanced gaming experience.
+                category (Class A and Class B). A registration fee of 150 pesos
+                will be paid at the venue.
               </div>
               <div className="font-mono text-center text-lg">
                 Register your team below:
