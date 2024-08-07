@@ -73,8 +73,13 @@ export default function Home() {
           )}
           {!registered && (
             <>
+              <div className="bg-yellow-100 p-2 mb-4 text-sm font-mono">
+                3 winners (gold, silver, and bronze) will be selected in each
+                category (Class A and Class B). The organizers will categorize
+                each team to ensure a balanced gaming experience.
+              </div>
               <div className="font-mono text-center text-lg">
-                Fill up the form
+                Register your team below:
               </div>
               <div className="font-mono">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -147,6 +152,7 @@ export default function Home() {
                         )}
                       </div>
                     </div>
+
                     <button
                       type="submit"
                       className="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-500 border border-emerald-600 font-bold px-2 py-1 text-lg text-white rounded-sm"
