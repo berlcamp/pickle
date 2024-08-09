@@ -4,7 +4,7 @@ export default function Home() {
       <iframe
         src="https://challonge.com/jpkqiti7/module"
         width="100%"
-        height="500"
+        height="1000"
       ></iframe>
     </main>
   );
