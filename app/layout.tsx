@@ -6,8 +6,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "1st Asenso Migcanaway Pickleball Tournament",
-  description: "1st Asenso Migcanaway Pickleball Tournament",
+  title: "Ozamiz City Pickleball Tournament 2024",
+  description: "Ozamiz City Pickleball Tournament 2024",
 };
 
 export default function RootLayout({
