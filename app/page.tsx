@@ -1,6 +1,7 @@
 "use client";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -66,6 +67,22 @@ export default function Home() {
       <Image alt="Pickle" src="/bg2.png" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
         <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+          <div className="font-mono text-center text-lg mb-4">
+            Click the links below to see matches schedules and results:
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
+            <div className="font-mono">
+              <Link href="/classa">Advance</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/classb">Intermediate</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/classc">Beginner</Link>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
