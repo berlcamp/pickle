@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Head from "next/head";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import Head from 'next/head'
+import './globals.css'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Ozamiz City Pickleball Tournament 2024",
-  description: "Ozamiz City Pickleball Tournament 2024",
-};
+  title: 'Asenso Tangub Pickleball Tournament',
+  description: 'Asenso Tangub Pickleball Tournament'
+}
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
@@ -24,5 +24,5 @@ export default function RootLayout({
       </Head>
       <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }
