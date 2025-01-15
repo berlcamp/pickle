@@ -1,43 +1,45 @@
-"use client";
-import { createClient } from "@supabase/supabase-js";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+'use client'
+import { createClient } from '@supabase/supabase-js'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const serviceAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+const serviceAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
 // Create a single supabase client for interacting with your database
-const supabase = createClient(supabaseUrl, serviceAnonKey);
+const supabase = createClient(supabaseUrl, serviceAnonKey)
 
 interface FormTypes {
-  player_a: string;
-  player_b: string;
-  contact_number: string;
-  address: string;
+  player_a: string
+  player_b: string
+  contact_number: string
+  address: string
 }
 
 export default function Home() {
-  const [saving, setSaving] = useState(false);
-  const [registered, setRegistered] = useState(false);
+  const [saving, setSaving] = useState(false)
+  const [registered, setRegistered] = useState(false)
+  const [registrations, setRegistrations] = useState<FormTypes[] | []>([])
+  const [viewReg, setViewReg] = useState(false)
 
   const {
     register,
     formState: { errors },
     reset,
-    handleSubmit,
+    handleSubmit
   } = useForm<FormTypes>({
-    mode: "onSubmit",
-  });
+    mode: 'onSubmit'
+  })
 
   const onSubmit = async (formdata: FormTypes) => {
-    if (saving) return;
+    if (saving) return
 
-    setSaving(true);
+    setSaving(true)
 
-    void handleCreate(formdata);
-  };
+    void handleCreate(formdata)
+  }
 
   const handleCreate = async (formdata: FormTypes) => {
     const params = {
@@ -45,28 +47,42 @@ export default function Home() {
       player_b: formdata.player_b,
       contact_number: formdata.contact_number,
       address: formdata.address,
-    };
+      event: 'asenso tangub'
+    }
 
     try {
       const { data, error } = await supabase
-        .from("pickle")
+        .from('pickle')
         .insert(params)
-        .select();
+        .select()
 
-      if (error) throw new Error(error.message);
+      if (error) throw new Error(error.message)
 
-      setSaving(false);
-      setRegistered(true);
+      setSaving(false)
+      setRegistered(true)
     } catch (error) {
-      console.error("error", error);
+      console.error('error', error)
     }
-  };
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      const { data } = await supabase
+        .from('pickle')
+        .select()
+        .eq('event', 'asenso tangub')
+
+      if (data) {
+        setRegistrations(data)
+      }
+    })()
+  }, [registered])
 
   return (
     <main className="flex flex-col items-center justify-start min-h-screen">
-      <Image alt="Pickle" src="/bg2.png" width={500} height={24} />
+      <Image alt="Pickle" src="/bg2.jpg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
           <div className="font-mono text-center text-lg mb-4">
             Click the links below to see matches schedules and results:
           </div>
@@ -82,7 +98,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
@@ -102,7 +118,7 @@ export default function Home() {
                       </div>
                       <div>
                         <input
-                          {...register("player_a", { required: true })}
+                          {...register('player_a', { required: true })}
                           type="text"
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         />
@@ -119,7 +135,7 @@ export default function Home() {
                       </div>
                       <div>
                         <input
-                          {...register("player_b", { required: true })}
+                          {...register('player_b', { required: true })}
                           type="text"
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         />
@@ -136,7 +152,7 @@ export default function Home() {
                       </div>
                       <div>
                         <input
-                          {...register("contact_number", { required: true })}
+                          {...register('contact_number', { required: true })}
                           type="text"
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         />
@@ -153,7 +169,7 @@ export default function Home() {
                       </div>
                       <div>
                         <input
-                          {...register("address", { required: true })}
+                          {...register('address', { required: true })}
                           type="text"
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         />
@@ -177,7 +193,29 @@ export default function Home() {
             </>
           )}
         </div>
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+          <div className="font-mono text-center mb-4">
+            <span
+              className="cursor-pointer text-xs border border-gray-500 p-1"
+              onClick={() => setViewReg(!viewReg)}
+            >
+              View Registrants
+            </span>
+          </div>
+          {viewReg && (
+            <div className="flex flex-col items-center justify-center space-y-2">
+              {registrations?.map((r, i) => (
+                <div key={i} className="uppercase text-xs">
+                  {r.player_a} / {r.player_b} - {r.address}
+                </div>
+              ))}
+              {registrations.length === 0 && (
+                <div className="uppercase text-xs">No registrants yet.</div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </main>
-  );
+  )
 }
