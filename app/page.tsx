@@ -91,7 +91,7 @@ export default function Home() {
               <Link href="/classa">Advance</Link>
             </div>
             <div className="font-mono">
-              <Link href="/classb">Intermediate A</Link>
+              <Link href="/classb">Intermediate</Link>
             </div>
             <div className="font-mono">
               <Link href="/classc">Beginner A</Link>
