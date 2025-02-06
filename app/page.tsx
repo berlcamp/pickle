@@ -82,7 +82,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-start min-h-screen">
       <Image alt="Pickle" src="/bg2.jpg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
             Click the links below to see matches schedules and results:
           </div>
@@ -91,14 +91,17 @@ export default function Home() {
               <Link href="/classa">Advance</Link>
             </div>
             <div className="font-mono">
-              <Link href="/classb">Intermediate</Link>
+              <Link href="/classb">Intermediate A</Link>
             </div>
             <div className="font-mono">
-              <Link href="/classc">Beginner</Link>
+              <Link href="/classc">Beginner A</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/classd">Beginner B</Link>
             </div>
           </div>
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
@@ -193,7 +196,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center mb-4">
             <span
               className="cursor-pointer text-xs border border-gray-500 p-1"
