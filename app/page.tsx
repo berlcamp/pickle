@@ -16,6 +16,7 @@ interface FormTypes {
   player_b: string
   contact_number: string
   address: string
+  category: string
 }
 
 export default function Home() {
@@ -47,6 +48,7 @@ export default function Home() {
       player_b: formdata.player_b,
       contact_number: formdata.contact_number,
       address: formdata.address,
+      category: formdata.category,
       event: 'tcat'
     }
 
@@ -166,6 +168,7 @@ export default function Home() {
                         )}
                       </div>
                     </div>
+
                     <div>
                       <div className="text-gray-600 font-medium text-sm">
                         Address (City/Municipality)
@@ -179,6 +182,35 @@ export default function Home() {
                         {errors.address && (
                           <div className="app__error_message">
                             Address is required
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600 font-medium text-sm">
+                        Category
+                      </div>
+                      <div>
+                        <select
+                          {...register('category', { required: true })}
+                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                        >
+                          <option value="">Select category</option>
+                          <option value="Beginner Mens">Beginner Mens</option>
+                          <option value="Beginner Womens">
+                            Beginner Womens
+                          </option>
+                          <option value="Intermediate Mixed">
+                            Intermediate Mixed{' '}
+                          </option>
+                          <option value="Open Mens">Open Mens</option>
+                          <option value="Open Womens">Open Womens</option>
+                          <option value="Open Mixed">Open Mixed </option>
+                        </select>
+
+                        {errors.category && (
+                          <div className="app__error_message">
+                            Category is required
                           </div>
                         )}
                       </div>
@@ -209,7 +241,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-2">
               {registrations?.map((r, i) => (
                 <div key={i} className="uppercase text-xs">
-                  {r.player_a} / {r.player_b} - {r.address}
+                  {r.player_a} / {r.player_b} ({r.category}) - {r.address}
                 </div>
               ))}
               {registrations.length === 0 && (
