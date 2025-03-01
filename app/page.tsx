@@ -47,7 +47,7 @@ export default function Home() {
       player_b: formdata.player_b,
       contact_number: formdata.contact_number,
       address: formdata.address,
-      event: 'asenso tangub'
+      event: 'tcat'
     }
 
     try {
@@ -70,7 +70,7 @@ export default function Home() {
       const { data } = await supabase
         .from('pickle')
         .select()
-        .eq('event', 'asenso tangub')
+        .eq('event', 'tcat')
 
       if (data) {
         setRegistrations(data)
@@ -82,7 +82,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-start min-h-screen">
       <Image alt="Pickle" src="/bg2.jpg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
             Click the links below to see matches schedules and results:
           </div>
@@ -101,7 +101,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
@@ -196,7 +196,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center mb-4">
             <span
               className="cursor-pointer text-xs border border-gray-500 p-1"
