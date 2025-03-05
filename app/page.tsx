@@ -17,6 +17,8 @@ interface FormTypes {
   contact_number: string
   address: string
   category: string
+  tshirt_size_a: string
+  tshirt_size_b: string
 }
 
 export default function Home() {
@@ -49,6 +51,7 @@ export default function Home() {
       contact_number: formdata.contact_number,
       address: formdata.address,
       category: formdata.category,
+      tshirt_size: formdata.tshirt_size,
       event: 'tcat'
     }
 
@@ -211,6 +214,56 @@ export default function Home() {
                         {errors.category && (
                           <div className="app__error_message">
                             Category is required
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600 font-medium text-sm">
+                        T-shirt Size (Player A)
+                      </div>
+                      <div>
+                        <select
+                          {...register('tshirt_size_a', { required: true })}
+                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                        >
+                          <option value="">Select size</option>
+                          <option value="XS">XS</option>
+                          <option value="S">S</option>
+                          <option value="M">M</option>
+                          <option value="L">L</option>
+                          <option value="XL">XL</option>
+                          <option value="2XL">2XL</option>
+                        </select>
+
+                        {errors.tshirt_size_a && (
+                          <div className="app__error_message">
+                            T-shirt size is required
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600 font-medium text-sm">
+                        T-shirt Size (Player B)
+                      </div>
+                      <div>
+                        <select
+                          {...register('tshirt_size_b', { required: true })}
+                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                        >
+                          <option value="">Select size</option>
+                          <option value="XS">XS</option>
+                          <option value="S">S</option>
+                          <option value="M">M</option>
+                          <option value="L">L</option>
+                          <option value="XL">XL</option>
+                          <option value="2XL">2XL</option>
+                        </select>
+
+                        {errors.tshirt_size_b && (
+                          <div className="app__error_message">
+                            T-shirt size is required
                           </div>
                         )}
                       </div>
