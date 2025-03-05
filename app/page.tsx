@@ -51,7 +51,8 @@ export default function Home() {
       contact_number: formdata.contact_number,
       address: formdata.address,
       category: formdata.category,
-      tshirt_size: formdata.tshirt_size,
+      tshirt_size_a: formdata.tshirt_size_a,
+      tshirt_size_b: formdata.tshirt_size_b,
       event: 'tcat'
     }
 
