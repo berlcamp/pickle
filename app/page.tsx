@@ -295,7 +295,8 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-2">
               {registrations?.map((r, i) => (
                 <div key={i} className="uppercase text-xs">
-                  {r.player_a} / {r.player_b} ({r.category}) - {r.address}
+                  {r.player_a}({r.tshirt_size_a}) / {r.player_b}(
+                  {r.tshirt_size_b}) ({r.category}) - {r.address}
                 </div>
               ))}
               {registrations.length === 0 && (
