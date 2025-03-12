@@ -225,7 +225,7 @@ export default function Home() {
                       </div>
                       <div>
                         <select
-                          {...register('tshirt_size_a', { required: true })}
+                          {...register('tshirt_size_a')}
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         >
                           <option value="">Select size</option>
@@ -235,13 +235,8 @@ export default function Home() {
                           <option value="L">L</option>
                           <option value="XL">XL</option>
                           <option value="2XL">2XL</option>
+                          <option value="3XL">3XL</option>
                         </select>
-
-                        {errors.tshirt_size_a && (
-                          <div className="app__error_message">
-                            T-shirt size is required
-                          </div>
-                        )}
                       </div>
                     </div>
                     <div>
@@ -250,7 +245,7 @@ export default function Home() {
                       </div>
                       <div>
                         <select
-                          {...register('tshirt_size_b', { required: true })}
+                          {...register('tshirt_size_b')}
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         >
                           <option value="">Select size</option>
@@ -261,12 +256,6 @@ export default function Home() {
                           <option value="XL">XL</option>
                           <option value="2XL">2XL</option>
                         </select>
-
-                        {errors.tshirt_size_b && (
-                          <div className="app__error_message">
-                            T-shirt size is required
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -295,8 +284,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center space-y-2">
               {registrations?.map((r, i) => (
                 <div key={i} className="uppercase text-xs">
-                  {r.player_a}({r.tshirt_size_a}) / {r.player_b}(
-                  {r.tshirt_size_b}) ({r.category}) - {r.address}
+                  {r.player_a} / {r.player_b} - {r.address}
                 </div>
               ))}
               {registrations.length === 0 && (
