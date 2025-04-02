@@ -102,6 +102,15 @@ export default function Home() {
             <div className="font-mono">
               <Link href="/openmixed">Open Mixed</Link>
             </div>
+            <div className="font-mono">
+              <Link href="/intermediate">Intermediate</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/beginnermens">Beginner Mens</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/beginnerwomens">Beginner Womens</Link>
+            </div>
           </div>
         </div>
         <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
