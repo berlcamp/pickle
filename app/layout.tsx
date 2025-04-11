@@ -6,8 +6,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'JNK TCAT Pickleball Tournament',
-  description: 'JNK TCAT Pickleball Tournament'
+  title: '2nd Asenso Migcanaway Pickleball Tournament',
+  description: '2nd Asenso Migcanaway Pickleball Tournament'
 }
 
 export default function RootLayout({

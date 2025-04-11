@@ -53,7 +53,7 @@ export default function Home() {
       category: formdata.category,
       tshirt_size_a: formdata.tshirt_size_a,
       tshirt_size_b: formdata.tshirt_size_b,
-      event: 'tcat'
+      event: 'migcanaway'
     }
 
     try {
@@ -76,7 +76,7 @@ export default function Home() {
       const { data } = await supabase
         .from('pickle')
         .select()
-        .eq('event', 'tcat')
+        .eq('event', 'migcanaway')
 
       if (data) {
         setRegistrations(data)
@@ -86,9 +86,9 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-start min-h-screen">
-      <Image alt="Pickle" src="/bg2.jpeg" width={500} height={24} />
+      <Image alt="Pickle" src="/migca.jpeg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
             Click the links below to see matches schedules and results:
           </div>
@@ -113,7 +113,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
@@ -126,7 +126,7 @@ export default function Home() {
               </div>
               <div className="font-mono">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="flex flex-col space-y-4">
+                  <div className="flex flex-col space-y-5">
                     <div>
                       <div className="text-gray-600 font-medium text-sm">
                         Player A
@@ -206,16 +206,9 @@ export default function Home() {
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         >
                           <option value="">Select category</option>
-                          <option value="Beginner Mens">Beginner Mens</option>
-                          <option value="Beginner Womens">
-                            Beginner Womens
-                          </option>
-                          <option value="Intermediate Mixed">
-                            Intermediate Mixed{' '}
-                          </option>
-                          <option value="Open Mens">Open Mens</option>
-                          <option value="Open Womens">Open Womens</option>
-                          <option value="Open Mixed">Open Mixed </option>
+                          <option value="Beginner">Beginner</option>
+                          <option value="Intermediate">Intermediate</option>
+                          <option value="Open">Open</option>
                         </select>
 
                         {errors.category && (
@@ -277,7 +270,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4 hidden">
+        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center mb-4">
             <span
               className="cursor-pointer text-xs border border-gray-500 p-1"
