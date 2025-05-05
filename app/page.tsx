@@ -53,7 +53,7 @@ export default function Home() {
       category: formdata.category,
       tshirt_size_a: formdata.tshirt_size_a,
       tshirt_size_b: formdata.tshirt_size_b,
-      event: 'migcanaway'
+      event: 'aruola'
     }
 
     try {
@@ -76,7 +76,7 @@ export default function Home() {
       const { data } = await supabase
         .from('pickle')
         .select()
-        .eq('event', 'migcanaway')
+        .eq('event', 'aruola')
 
       if (data) {
         setRegistrations(data)
@@ -86,7 +86,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-start min-h-screen">
-      <Image alt="Pickle" src="/migca.jpeg" width={500} height={24} />
+      <Image alt="Pickle" src="/aruola.jpeg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
         <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
@@ -206,9 +206,11 @@ export default function Home() {
                           className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
                         >
                           <option value="">Select category</option>
+                          <option value="Novice">Novice</option>
                           <option value="Beginner">Beginner</option>
                           <option value="Intermediate">Intermediate</option>
-                          <option value="Open">Open</option>
+                          <option value="Open Men">Open Men</option>
+                          <option value="Open Mixed">Open Mixed</option>
                         </select>
 
                         {errors.category && (
