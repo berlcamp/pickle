@@ -90,7 +90,7 @@ export default function Home() {
       <div className="w-full flex flex-col items-center justify-start p-4">
         <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
-            Click the links below to see matches schedules and results:
+            Click the links below to see match schedules and results:
           </div>
           <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
             <div className="font-mono">
