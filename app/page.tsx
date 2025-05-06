@@ -207,8 +207,14 @@ export default function Home() {
                         >
                           <option value="">Select category</option>
                           <option value="Novice">Novice</option>
-                          <option value="Beginner">Beginner</option>
-                          <option value="Intermediate">Intermediate</option>
+                          <option value="Beginner Men">Beginner Men</option>
+                          <option value="Beginner Women">Beginner Women</option>
+                          <option value="Intermediate Men">
+                            Intermediate Men
+                          </option>
+                          <option value="Intermediate Women">
+                            Intermediate Women
+                          </option>
                           <option value="Open Men">Open Men</option>
                           <option value="Open Mixed">Open Mixed</option>
                         </select>
