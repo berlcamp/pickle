@@ -94,25 +94,39 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
             <div className="font-mono">
-              <Link href="/novice">Novice</Link>
+              <Link target="_blank" href="/novice">
+                Novice
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/beginnermens">Beginner Mens</Link>
+              <Link target="_blank" href="/beginnermens">
+                Beginner Mens
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/beginnerwomens">Beginner Womens</Link>
+              <Link target="_blank" href="/beginnerwomens">
+                Beginner Womens
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/intermediatemen">Intermediate Mens</Link>
+              <Link target="_blank" href="/intermediatemen">
+                Intermediate Mens
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/intermediatewomen">Intermediate Womens</Link>
+              <Link target="_blank" href="/intermediatewomen">
+                Intermediate Womens
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/openmens">Open Mens</Link>
+              <Link target="_blank" href="/openmens">
+                Open Mens
+              </Link>
             </div>
             <div className="font-mono">
-              <Link href="/openmixed">Open Mixed</Link>
+              <Link target="_blank" href="/openmixed">
+                Open Mixed
+              </Link>
             </div>
 
             {/* <option value="Novice">Novice</option>
