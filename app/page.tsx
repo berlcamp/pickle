@@ -88,22 +88,13 @@ export default function Home() {
     <main className="flex flex-col items-center justify-start min-h-screen">
       <Image alt="Pickle" src="/aruola.jpeg" width={500} height={24} />
       <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className=" bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center text-lg mb-4">
             Click the links below to see match schedules and results:
           </div>
           <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
             <div className="font-mono">
-              <Link href="/openmens">Open Mens</Link>
-            </div>
-            <div className="font-mono">
-              <Link href="/openwomens">Open Womens</Link>
-            </div>
-            <div className="font-mono">
-              <Link href="/openmixed">Open Mixed</Link>
-            </div>
-            <div className="font-mono">
-              <Link href="/intermediate">Intermediate</Link>
+              <Link href="/novice">Novice</Link>
             </div>
             <div className="font-mono">
               <Link href="/beginnermens">Beginner Mens</Link>
@@ -111,9 +102,33 @@ export default function Home() {
             <div className="font-mono">
               <Link href="/beginnerwomens">Beginner Womens</Link>
             </div>
+            <div className="font-mono">
+              <Link href="/intermediatemen">Intermediate Mens</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/intermediatewomen">Intermediate Womens</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/openmens">Open Mens</Link>
+            </div>
+            <div className="font-mono">
+              <Link href="/openmixed">Open Mixed</Link>
+            </div>
+
+            {/* <option value="Novice">Novice</option>
+                          <option value="Beginner Men">Beginner Men</option>
+                          <option value="Beginner Women">Beginner Women</option>
+                          <option value="Intermediate Men">
+                            Intermediate Men
+                          </option>
+                          <option value="Intermediate Women">
+                            Intermediate Women
+                          </option>
+                          <option value="Open Men">Open Men</option>
+                          <option value="Open Mixed">Open Mixed</option> */}
           </div>
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           {registered && (
             <div className="font-mono text-center text-lg">
               You are successfully registered.
@@ -278,7 +293,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="bg-white text-gray-900 w-full sm:w-[500px] p-4">
+        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
           <div className="font-mono text-center mb-4">
             <span
               className="cursor-pointer text-xs border border-gray-500 p-1"
