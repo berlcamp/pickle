@@ -9,6 +9,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 interface Player {
+  id: number
   player_a: string
   player_b: string
   contact_number: string
@@ -21,6 +22,7 @@ interface Player {
   tshirt_name_b: string
   proof: string
   agree: boolean
+  flight: string | null // add this line
 }
 
 const categories = [
@@ -73,9 +75,47 @@ export default function ViewRegistrationsPage() {
     setLoading(false)
   }
 
+  const handleFlightChange = async (id: number, newFlight: string) => {
+    try {
+      const { error } = await supabase
+        .from('pickle')
+        .update({ flight: newFlight })
+        .eq('id', id)
+
+      if (error) throw error
+
+      // Update local state
+      setPlayers((prev) =>
+        prev.map((p, idx) => (p.id === id ? { ...p, flight: newFlight } : p))
+      )
+    } catch (err) {
+      console.error('Error updating flight:', err)
+      alert('Failed to update flight. Please try again.')
+    }
+  }
+
+  // // Fetch players on load
+  // useEffect(() => {
+  //   const fetchPlayers = async () => {
+  //     const { data, error } = await supabase
+  //       .from('pickle')
+  //       .select('*')
+  //       .eq('event', 'lopez')
+  //     if (!error && data) setPlayers(data)
+  //   }
+  //   fetchPlayers()
+  // }, [])
+
   useEffect(() => {
     if (category) handleFetch(category)
   }, [category])
+
+  // Group players by flight
+  const groupedByFlight = Array.from({ length: 8 }).map((_, i) => {
+    const flightName = `Flight ${i + 1}`
+    const playersInFlight = players.filter((p) => p.flight === flightName)
+    return { name: flightName, players: playersInFlight }
+  })
 
   // 🔒 Show password gate first
   if (!authenticated) {
@@ -169,6 +209,7 @@ export default function ViewRegistrationsPage() {
                     <th className="py-3 px-4 text-left">T-Shirt A</th>
                     <th className="py-3 px-4 text-left">T-Shirt B</th>
                     <th className="py-3 px-4 text-left">Proof of Payment</th>
+                    <th className="py-3 px-4 text-left">Flight</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,6 +251,22 @@ export default function ViewRegistrationsPage() {
                           <span className="text-gray-400 italic">No image</span>
                         )}
                       </td>
+                      <td className="py-3 px-4">
+                        <select
+                          value={player.flight || ''}
+                          onChange={(e) =>
+                            handleFlightChange(player.id, e.target.value)
+                          }
+                          className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        >
+                          <option value="">Select Flight</option>
+                          {Array.from({ length: 8 }).map((_, i) => (
+                            <option key={i + 1} value={`Flight ${i + 1}`}>
+                              Flight {i + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -224,6 +281,38 @@ export default function ViewRegistrationsPage() {
           )}
         </div>
       </div>
+
+      {/* --- FLIGHT BOXES --- */}
+      {players.length > 0 && (
+        <div className="relative mt-16 flex flex-col items-center px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {groupedByFlight.map((flight) => (
+              <div
+                key={flight.name}
+                className="border border-gray-300 rounded-lg shadow-sm p-4 bg-white"
+              >
+                <h2 className="font-semibold text-green-700 mb-3">
+                  {flight.name}
+                </h2>
+                {flight.players.length > 0 ? (
+                  <ul className="space-y-2">
+                    {flight.players.map((p) => (
+                      <li
+                        key={p.id}
+                        className="text-gray-700 text-sm border-b border-gray-100 pb-1"
+                      >
+                        {p.player_a} & {p.player_b}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-400 text-sm italic">No players yet</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {selectedImage && (
         <div
