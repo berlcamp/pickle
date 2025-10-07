@@ -40,6 +40,7 @@ export default function ViewRegistrationsPage() {
   const [category, setCategory] = useState('')
   const [players, setPlayers] = useState<Player[]>([])
   const [loading, setLoading] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   // ✅ You can store this password safely in .env.local
   const pagePassword = process.env.NEXT_PUBLIC_VIEW_PASSWORD || 'admin123'
@@ -193,13 +194,18 @@ export default function ViewRegistrationsPage() {
                       </td>
                       <td className="py-3 px-4">
                         {player.proof ? (
-                          <Image
-                            src={player.proof}
-                            alt="Proof"
-                            width={200}
-                            height={200}
-                            className="w-20 h-20 object-cover rounded-lg border border-gray-200"
-                          />
+                          <button
+                            onClick={() => setSelectedImage(player.proof)}
+                            className="focus:outline-none"
+                          >
+                            <Image
+                              src={player.proof}
+                              alt="Proof"
+                              width={200}
+                              height={200}
+                              className="w-20 h-20 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition"
+                            />
+                          </button>
                         ) : (
                           <span className="text-gray-400 italic">No image</span>
                         )}
@@ -218,6 +224,34 @@ export default function ViewRegistrationsPage() {
           )}
         </div>
       </div>
+
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative bg-white rounded-xl shadow-xl p-4 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <Image
+              src={selectedImage}
+              alt="Full Proof"
+              width={800}
+              height={800}
+              className="w-full h-auto rounded-lg object-contain max-h-[70vh]"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="text-center text-gray-400 text-sm mt-20 mb-6">
