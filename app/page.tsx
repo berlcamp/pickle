@@ -205,7 +205,10 @@ export default function Home() {
                 {/* Title */}
                 <div className="text-center space-y-8">
                   <div className="text-3xl font-bold text-green-700">
-                    1st Asenso Lopez Jaena Pickleball Tournament
+                    <div>1st Asenso Lopez Jaena Pickleball Tournament</div>
+                    <div className="text-base text-green-800">
+                      November 22-23 2025
+                    </div>
                   </div>
 
                   {/* Registration Fee Section */}
