@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const serviceAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-
-// Create a single supabase client for interacting with your database
 const supabase = createClient(supabaseUrl, serviceAnonKey)
 
 interface FormTypes {
@@ -19,7 +17,47 @@ interface FormTypes {
   category: string
   tshirt_size_a: string
   tshirt_size_b: string
+  proof?: FileList
+  agree: boolean
 }
+
+const categories = [
+  {
+    name: 'novice',
+    label: 'Novice',
+    link: 'category/novice'
+  },
+  {
+    name: 'bm',
+    label: 'Beginner Men',
+    link: 'category/bm'
+  },
+  {
+    name: 'bw',
+    label: 'Beginner Women',
+    link: 'category/bw'
+  },
+  {
+    name: 'bmx',
+    label: 'Beginner Mixed',
+    link: 'category/bmx'
+  },
+  {
+    name: 'im',
+    label: 'Intermediate Men',
+    link: 'category/im'
+  },
+  {
+    name: 'iw',
+    label: 'Intermediate Women',
+    link: 'category/iw'
+  },
+  {
+    name: 'open',
+    label: 'Open',
+    link: 'category/open'
+  }
+]
 
 export default function Home() {
   const [saving, setSaving] = useState(false)
@@ -30,21 +68,45 @@ export default function Home() {
   const {
     register,
     formState: { errors },
-    reset,
-    handleSubmit
+    handleSubmit,
+    reset
   } = useForm<FormTypes>({
     mode: 'onSubmit'
   })
 
   const onSubmit = async (formdata: FormTypes) => {
     if (saving) return
-
     setSaving(true)
-
-    void handleCreate(formdata)
+    await handleCreate(formdata)
   }
 
   const handleCreate = async (formdata: FormTypes) => {
+    let proofPath = null
+
+    // 🔹 1. Upload proof of payment file if exists
+    if (formdata.proof && formdata.proof.length > 0) {
+      const file = formdata.proof[0]
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}_${formdata.player_a
+        .replace(/\s+/g, '_')
+        .toLowerCase()}.${fileExt}`
+      const filePath = `proofs/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('publicbucket') // make sure your Supabase bucket name is 'proofs'
+        .upload(filePath, file, { upsert: true })
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError)
+        alert('Error uploading proof of payment.')
+        setSaving(false)
+        return
+      }
+
+      proofPath = filePath
+    }
+
+    // 🔹 2. Insert registration record into pickle table
     const params = {
       player_a: formdata.player_a,
       player_b: formdata.player_b,
@@ -53,21 +115,21 @@ export default function Home() {
       category: formdata.category,
       tshirt_size_a: formdata.tshirt_size_a,
       tshirt_size_b: formdata.tshirt_size_b,
-      event: 'aruola'
+      proof: proofPath, // store proof path here
+      event: 'lopez'
     }
 
     try {
-      const { data, error } = await supabase
-        .from('pickle')
-        .insert(params)
-        .select()
-
+      const { error } = await supabase.from('pickle').insert(params).select()
       if (error) throw new Error(error.message)
 
-      setSaving(false)
       setRegistered(true)
+      reset()
     } catch (error) {
-      console.error('error', error)
+      console.error('Insert error:', error)
+      alert('Error saving registration.')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -76,7 +138,7 @@ export default function Home() {
       const { data } = await supabase
         .from('pickle')
         .select()
-        .eq('event', 'aruola')
+        .eq('event', 'lopez')
 
       if (data) {
         setRegistrations(data)
@@ -85,86 +147,113 @@ export default function Home() {
   }, [registered])
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen">
-      <Image alt="Pickle" src="/aruola.jpeg" width={500} height={24} />
-      <div className="w-full flex flex-col items-center justify-start p-4">
-        <div className=" bg-white text-gray-900 w-full sm:w-[500px] p-4">
-          <div className="font-mono text-center text-lg mb-4">
-            Click the links below to see match schedules and results:
-          </div>
-          <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
-            <div className="font-mono">
+    <div className="relative min-h-screen bg-gray-100">
+      {/* Banner */}
+      <div className="relative w-full h-[300px] md:h-[450px] lg:h-[550px] overflow-hidden">
+        <Image
+          src="/banner.jpeg"
+          alt="Pickle Tournament Banner"
+          fill
+          priority
+          className="object-contain md:object-cover object-[top_center] brightness-75 transition-all duration-500"
+          sizes="100vw"
+        />
+      </div>
+
+      <div className="w-full flex flex-col items-center justify-start p-8">
+        <div className="-mt-44 border border-gray-100 rounded-2xl bg-white p-4 z-50">
+          {/* Hidden Section for Links */}
+          <div className="hidden bg-white text-gray-900 w-full p-4">
+            <div className="font-mono text-center text-lg mb-4">
+              Click the links below to see match schedules and results:
+            </div>
+            <div className="flex flex-col items-center justify-center space-y-4 text-blue-900 underline underline-offset-2">
               <Link target="_blank" href="/novice">
                 Novice
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/beginnermens">
                 Beginner Mens
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/beginnerwomens">
                 Beginner Womens
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/intermediatemen">
                 Intermediate Mens
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/intermediatewomen">
                 Intermediate Womens
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/openmens">
                 Open Mens
               </Link>
-            </div>
-            <div className="font-mono">
               <Link target="_blank" href="/openmixed">
                 Open Mixed
               </Link>
             </div>
-
-            {/* <option value="Novice">Novice</option>
-                          <option value="Beginner Men">Beginner Men</option>
-                          <option value="Beginner Women">Beginner Women</option>
-                          <option value="Intermediate Men">
-                            Intermediate Men
-                          </option>
-                          <option value="Intermediate Women">
-                            Intermediate Women
-                          </option>
-                          <option value="Open Men">Open Men</option>
-                          <option value="Open Mixed">Open Mixed</option> */}
           </div>
-        </div>
-        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
-          {registered && (
-            <div className="font-mono text-center text-lg">
-              You are successfully registered.
-            </div>
-          )}
-          {!registered && (
-            <>
+
+          {/* Registration Form */}
+          <div className="bg-white text-gray-900 w-full p-4">
+            {registered ? (
               <div className="font-mono text-center text-lg">
-                Register your team below:
+                ✅ You are successfully registered.
               </div>
-              <div className="font-mono">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="flex flex-col space-y-5">
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        Player A
+            ) : (
+              <>
+                {/* Title */}
+                <div className="text-center mb-6">
+                  <div className="text-3xl font-bold text-green-700">
+                    1st Asenso Lopez Jaena Pickleball Tournament
+                  </div>
+
+                  {/* Registration Fee Section */}
+                  <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-xl inline-block px-6 py-4 text-sm md:text-base shadow-sm">
+                    <h2 className="text-emerald-700 font-semibold text-lg mb-2 text-center">
+                      Registration Fee
+                    </h2>
+                    <div className="grid grid-cols-1 gap-2 text-gray-700 text-left">
+                      <div className="flex justify-between border-b border-gray-100 pb-1 space-x-2">
+                        <div>
+                          <div>Novice</div>
+                          <div className="text-xs italic text-gray-500">
+                            (Exclusive only for Players Residing in Misamis
+                            Occidental)
+                          </div>
+                        </div>
+                        <span className="font-medium">₱600/player</span>
                       </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-1 space-x-2">
+                        <span>Beginner</span>
+                        <span className="font-medium">₱700/player</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-1 space-x-2">
+                        <span>Intermediate</span>
+                        <span className="font-medium">₱800/player</span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-100 pb-1 space-x-2">
+                        <span>Open</span>
+                        <span className="font-medium">₱1,000/player</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="my-6 font-mono text-center text-lg">
+                  Register your team below:
+                </div>
+
+                <div className="font-mono">
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex flex-col space-y-6">
+                      {/* Player A */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Player A
+                        </div>
                         <input
                           {...register('player_a', { required: true })}
                           type="text"
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
                         {errors.player_a && (
                           <div className="app__error_message">
@@ -172,16 +261,16 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        Player B
-                      </div>
+
+                      {/* Player B */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Player B
+                        </div>
                         <input
                           {...register('player_b', { required: true })}
                           type="text"
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
                         {errors.player_b && (
                           <div className="app__error_message">
@@ -189,16 +278,16 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        Contact #
-                      </div>
+
+                      {/* Contact */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Contact #
+                        </div>
                         <input
                           {...register('contact_number', { required: true })}
                           type="text"
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
                         {errors.contact_number && (
                           <div className="app__error_message">
@@ -206,17 +295,16 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                    </div>
 
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        Address (City/Municipality)
-                      </div>
+                      {/* Address */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Address (City/Municipality)
+                        </div>
                         <input
                           {...register('address', { required: true })}
                           type="text"
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
                         {errors.address && (
                           <div className="app__error_message">
@@ -224,47 +312,40 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        Category
-                      </div>
+
+                      {/* Category */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Category
+                        </div>
                         <select
                           {...register('category', { required: true })}
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         >
-                          <option value="">Select category</option>
-                          <option value="Novice">Novice</option>
-                          <option value="Beginner Men">Beginner Men</option>
-                          <option value="Beginner Women">Beginner Women</option>
-                          <option value="Intermediate Men">
-                            Intermediate Men
-                          </option>
-                          <option value="Intermediate Women">
-                            Intermediate Women
-                          </option>
-                          <option value="Open Men">Open Men</option>
-                          <option value="Open Mixed">Open Mixed</option>
+                          <option value=""></option>
+                          {categories.map((cat, idx) => (
+                            <option key={idx} value={cat.name}>
+                              {cat.label}
+                            </option>
+                          ))}
                         </select>
-
                         {errors.category && (
                           <div className="app__error_message">
                             Category is required
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        T-shirt Size (Player A)
-                      </div>
+
+                      {/* Tshirt Sizes */}
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          T-shirt Size (Player A)
+                        </div>
                         <select
-                          {...register('tshirt_size_a')}
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          {...register('tshirt_size_a', { required: true })}
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         >
-                          <option value="">Select size</option>
+                          <option value=""></option>
                           <option value="XS">XS</option>
                           <option value="S">S</option>
                           <option value="M">M</option>
@@ -273,18 +354,22 @@ export default function Home() {
                           <option value="2XL">2XL</option>
                           <option value="3XL">3XL</option>
                         </select>
+                        {errors.tshirt_size_a && (
+                          <div className="app__error_message">
+                            T-shirt Size is required
+                          </div>
+                        )}
                       </div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600 font-medium text-sm">
-                        T-shirt Size (Player B)
-                      </div>
+
                       <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          T-shirt Size (Player B)
+                        </div>
                         <select
-                          {...register('tshirt_size_b')}
-                          className="w-full text-sm py-1 px-2 text-gray-600 border border-gray-300 rounded-sm focus:ring-0 focus:outline-none"
+                          {...register('tshirt_size_b', { required: true })}
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         >
-                          <option value="">Select size</option>
+                          <option value=""></option>
                           <option value="XS">XS</option>
                           <option value="S">S</option>
                           <option value="M">M</option>
@@ -292,44 +377,99 @@ export default function Home() {
                           <option value="XL">XL</option>
                           <option value="2XL">2XL</option>
                         </select>
+                        {errors.tshirt_size_b && (
+                          <div className="app__error_message">
+                            T-shirt Size is required
+                          </div>
+                        )}
                       </div>
-                    </div>
 
-                    <button
-                      type="submit"
-                      className="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-500 border border-emerald-600 font-bold px-2 py-1 text-lg text-white rounded-sm"
-                    >
-                      Register
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </>
-          )}
-        </div>
-        <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
-          <div className="font-mono text-center mb-4">
-            <span
-              className="cursor-pointer text-xs border border-gray-500 p-1"
-              onClick={() => setViewReg(!viewReg)}
-            >
-              View Registrants
-            </span>
-          </div>
-          {viewReg && (
-            <div className="flex flex-col items-center justify-center space-y-2">
-              {registrations?.map((r, i) => (
-                <div key={i} className="uppercase text-xs">
-                  {r.player_a} / {r.player_b} - {r.address}
+                      {/* Proof of Payment */}
+                      <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Upload Proof of Payment
+                        </div>
+                        <input
+                          {...register('proof', { required: true })}
+                          type="file"
+                          accept="image/*,application/pdf"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
+                        />
+                        {errors.proof && (
+                          <div className="app__error_message">
+                            Proof of payment is required
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Terms & Disclaimer */}
+                      <div className="flex items-start space-x-2 mt-4">
+                        <input
+                          {...register('agree', { required: true })}
+                          type="checkbox"
+                          id="agree"
+                          className="mt-1"
+                        />
+                        <label
+                          htmlFor="agree"
+                          className="text-sm text-gray-600"
+                        >
+                          I have read and agree to the{' '}
+                          <Link
+                            href="/terms"
+                            target="_blank"
+                            className="text-green-600 underline"
+                          >
+                            terms and disclaimer
+                          </Link>
+                          .
+                        </label>
+                      </div>
+                      {errors.agree && (
+                        <div className="app__error_message">
+                          You need to agree our terms to continue
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-500 border border-emerald-600 font-bold px-2 py-1 text-lg text-white rounded-sm"
+                      >
+                        {saving ? 'Saving...' : 'Register'}
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              ))}
-              {registrations.length === 0 && (
-                <div className="uppercase text-xs">No registrants yet.</div>
-              )}
+              </>
+            )}
+          </div>
+
+          {/* View Registrants */}
+          <div className="hidden bg-white text-gray-900 w-full sm:w-[500px] p-4">
+            <div className="font-mono text-center mb-4">
+              <span
+                className="cursor-pointer text-xs border border-gray-500 p-1"
+                onClick={() => setViewReg(!viewReg)}
+              >
+                View Registrants
+              </span>
             </div>
-          )}
+            {viewReg && (
+              <div className="flex flex-col items-center justify-center space-y-2">
+                {registrations?.map((r, i) => (
+                  <div key={i} className="uppercase text-xs">
+                    {r.player_a} / {r.player_b} - {r.address}
+                  </div>
+                ))}
+                {registrations.length === 0 && (
+                  <div className="uppercase text-xs">No registrants yet.</div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
