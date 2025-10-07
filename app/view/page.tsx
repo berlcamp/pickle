@@ -4,7 +4,6 @@ import { createClient } from '@supabase/supabase-js'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-// Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const supabase = createClient(supabaseUrl, supabaseKey)
@@ -25,47 +24,35 @@ interface Player {
 }
 
 const categories = [
-  {
-    name: 'novice',
-    label: 'Novice',
-    link: 'category/novice'
-  },
-  {
-    name: 'bm',
-    label: 'Beginner Men',
-    link: 'category/bm'
-  },
-  {
-    name: 'bw',
-    label: 'Beginner Women',
-    link: 'category/bw'
-  },
-  {
-    name: 'bmx',
-    label: 'Beginner Mixed',
-    link: 'category/bmx'
-  },
-  {
-    name: 'im',
-    label: 'Intermediate Men',
-    link: 'category/im'
-  },
-  {
-    name: 'iw',
-    label: 'Intermediate Women',
-    link: 'category/iw'
-  },
-  {
-    name: 'open',
-    label: 'Open',
-    link: 'category/open'
-  }
+  { name: 'novice', label: 'Novice' },
+  { name: 'bm', label: 'Beginner Men' },
+  { name: 'bw', label: 'Beginner Women' },
+  { name: 'bmx', label: 'Beginner Mixed' },
+  { name: 'im', label: 'Intermediate Men' },
+  { name: 'iw', label: 'Intermediate Women' },
+  { name: 'open', label: 'Open' }
 ]
 
 export default function ViewRegistrationsPage() {
+  const [authenticated, setAuthenticated] = useState(false)
+  const [inputPassword, setInputPassword] = useState('')
+  const [error, setError] = useState('')
   const [category, setCategory] = useState('')
   const [players, setPlayers] = useState<Player[]>([])
   const [loading, setLoading] = useState(false)
+
+  // ✅ You can store this password safely in .env.local
+  const pagePassword = process.env.NEXT_PUBLIC_VIEW_PASSWORD || 'admin123'
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (inputPassword === pagePassword) {
+      setAuthenticated(true)
+      setError('')
+    } else {
+      setError('Incorrect password.')
+    }
+  }
 
   const handleFetch = async (selectedCategory: string) => {
     setLoading(true)
@@ -89,6 +76,41 @@ export default function ViewRegistrationsPage() {
     if (category) handleFetch(category)
   }, [category])
 
+  // 🔒 Show password gate first
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+        <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm border border-gray-200">
+          <h1 className="text-xl font-semibold text-center text-green-700 mb-4">
+            Protected Page
+          </h1>
+          <p className="text-center text-gray-500 mb-6">
+            Please enter the admin password to view registrations.
+          </p>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-3 text-gray-700"
+            />
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  // ✅ If authenticated, show your existing table UI
   return (
     <div className="relative min-h-screen bg-gray-50">
       {/* Banner Background */}
@@ -157,9 +179,18 @@ export default function ViewRegistrationsPage() {
                       <td className="py-3 px-4">{index + 1}</td>
                       <td className="py-3 px-4">{player.player_a}</td>
                       <td className="py-3 px-4">{player.player_b}</td>
-                      <td className="py-3 px-4">{player.contact_number}</td>
-                      <td className="py-3 px-4">{player.tshirt_size_a}</td>
-                      <td className="py-3 px-4">{player.tshirt_size_b}</td>
+                      <td className="py-3 px-4">
+                        <div>{player.contact_number}</div>
+                        <div>{player.club}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div>{player.tshirt_size_a}</div>
+                        <div>{player.tshirt_name_a}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div>{player.tshirt_size_b}</div>
+                        <div>{player.tshirt_name_b}</div>
+                      </td>
                       <td className="py-3 px-4">
                         {player.proof ? (
                           <Image
