@@ -14,6 +14,7 @@ interface FormTypes {
   player_b: string
   contact_number: string
   address: string
+  club: string
   category: string
   tshirt_size_a: string
   tshirt_size_b: string
@@ -113,6 +114,7 @@ export default function Home() {
       contact_number: formdata.contact_number,
       address: formdata.address,
       category: formdata.category,
+      club: formdata.club,
       tshirt_size_a: formdata.tshirt_size_a,
       tshirt_size_b: formdata.tshirt_size_b,
       proof: proofPath, // store proof path here
@@ -201,7 +203,7 @@ export default function Home() {
             ) : (
               <>
                 {/* Title */}
-                <div className="text-center mb-6">
+                <div className="text-center space-y-8">
                   <div className="text-3xl font-bold text-green-700">
                     1st Asenso Lopez Jaena Pickleball Tournament
                   </div>
@@ -233,6 +235,18 @@ export default function Home() {
                       <div className="flex justify-between border-b border-gray-100 pb-1 space-x-2">
                         <span>Open</span>
                         <span className="font-medium">₱1,000/player</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 text-emerald-700 mb-2 text-center">
+                      <div>
+                        You can pay through GCash:{' '}
+                        <span className="font-bold">
+                          09765311269 / Paul Thomas Saladaga
+                        </span>
+                      </div>
+                      <div className="italic text-sm">
+                        (Please capture a photo of your transaction as proof of
+                        payment)
                       </div>
                     </div>
                   </div>
@@ -309,6 +323,23 @@ export default function Home() {
                         {errors.address && (
                           <div className="app__error_message">
                             Address is required
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Club Name */}
+                      <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Club Name
+                        </div>
+                        <input
+                          {...register('club', { required: true })}
+                          type="text"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
+                        />
+                        {errors.address && (
+                          <div className="app__error_message">
+                            Club Name is required
                           </div>
                         )}
                       </div>
