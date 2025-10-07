@@ -87,6 +87,7 @@ export default function Home() {
     let proofPath = null
 
     // 🔹 1. Upload proof of payment file if exists
+
     if (formdata.proof && formdata.proof.length > 0) {
       const file = formdata.proof[0]
       const fileExt = file.name.split('.').pop()
@@ -95,8 +96,9 @@ export default function Home() {
         .toLowerCase()}.${fileExt}`
       const filePath = `proofs/${fileName}`
 
+      // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
-        .from('publicbucket') // make sure your Supabase bucket name is 'proofs'
+        .from('publicbucket') // ✅ make sure this is your actual bucket name
         .upload(filePath, file, { upsert: true })
 
       if (uploadError) {
@@ -106,7 +108,12 @@ export default function Home() {
         return
       }
 
-      proofPath = filePath
+      // 🔹 2. Get public URL immediately
+      const { data: publicUrlData } = supabase.storage
+        .from('publicbucket')
+        .getPublicUrl(filePath)
+
+      proofPath = publicUrlData.publicUrl // ✅ this is the public path to save
     }
 
     // 🔹 2. Insert registration record into pickle table
