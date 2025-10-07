@@ -432,7 +432,7 @@ export default function Home() {
                           type="text"
                           className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
-                        {errors.address && (
+                        {errors.tshirt_name_a && (
                           <div className="app__error_message">
                             Name on T-shirt is required
                           </div>
@@ -448,7 +448,7 @@ export default function Home() {
                           type="text"
                           className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         />
-                        {errors.address && (
+                        {errors.tshirt_name_b && (
                           <div className="app__error_message">
                             Name on T-shirt is required
                           </div>
