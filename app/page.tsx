@@ -18,6 +18,8 @@ interface FormTypes {
   category: string
   tshirt_size_a: string
   tshirt_size_b: string
+  tshirt_name_a: string
+  tshirt_name_b: string
   proof?: FileList
   agree: boolean
 }
@@ -117,6 +119,8 @@ export default function Home() {
       club: formdata.club,
       tshirt_size_a: formdata.tshirt_size_a,
       tshirt_size_b: formdata.tshirt_size_b,
+      tshirt_name_a: formdata.tshirt_name_a,
+      tshirt_name_b: formdata.tshirt_name_b,
       proof: proofPath, // store proof path here
       event: 'lopez'
     }
@@ -414,6 +418,39 @@ export default function Home() {
                         {errors.tshirt_size_b && (
                           <div className="app__error_message">
                             T-shirt Size is required
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Name on Tshirt */}
+                      <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Name on T-shirt (Player 1)
+                        </div>
+                        <input
+                          {...register('tshirt_name_a', { required: true })}
+                          type="text"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
+                        />
+                        {errors.address && (
+                          <div className="app__error_message">
+                            Name on T-shirt is required
+                          </div>
+                        )}
+                      </div>
+                      {/* Name on Tshirt */}
+                      <div>
+                        <div className="text-gray-600 font-medium text-sm">
+                          Name on T-shirt (Player 2)
+                        </div>
+                        <input
+                          {...register('tshirt_name_b', { required: true })}
+                          type="text"
+                          className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
+                        />
+                        {errors.address && (
+                          <div className="app__error_message">
+                            Name on T-shirt is required
                           </div>
                         )}
                       </div>
