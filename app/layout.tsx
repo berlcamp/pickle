@@ -18,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <meta property="og:image" content="/bg2.png" />
-        <meta name="twitter:image" content="/bg2.png" />
+        <meta property="og:image" content="/banner.jpeg" />
+        <meta name="twitter:image" content="/banner.jpeg" />
         {/* Add more meta tags as needed */}
       </Head>
       <body className={inter.className}>{children}</body>
