@@ -23,6 +23,7 @@ interface Player {
   proof: string
   agree: boolean
   flight: string | null // add this line
+  status: string | null // add this line
 }
 
 const categories = [
@@ -95,17 +96,24 @@ export default function ViewRegistrationsPage() {
     }
   }
 
-  // // Fetch players on load
-  // useEffect(() => {
-  //   const fetchPlayers = async () => {
-  //     const { data, error } = await supabase
-  //       .from('pickle')
-  //       .select('*')
-  //       .eq('event', 'lopez')
-  //     if (!error && data) setPlayers(data)
-  //   }
-  //   fetchPlayers()
-  // }, [])
+  const handleStatusChange = async (id: number, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('pickle')
+        .update({ status: newStatus })
+        .eq('id', id)
+
+      if (error) throw error
+
+      // Update local state
+      setPlayers((prev) =>
+        prev.map((p, idx) => (p.id === id ? { ...p, status: newStatus } : p))
+      )
+    } catch (err) {
+      console.error('Error updating status:', err)
+      alert('Failed to update status. Please try again.')
+    }
+  }
 
   useEffect(() => {
     if (category) handleFetch(category)
@@ -168,7 +176,7 @@ export default function ViewRegistrationsPage() {
 
       {/* Content */}
       <div className="relative md:-mt-16 flex flex-col items-center px-4">
-        <div className="bg-white shadow-2xl rounded-2xl w-full max-w-5xl p-8 md:p-10 border border-gray-100">
+        <div className="bg-white shadow-2xl rounded-2xl w-full p-8 md:p-10 border border-gray-100">
           <h2 className="text-2xl font-bold text-center text-green-700 mb-6">
             View Registered Players
           </h2>
@@ -211,6 +219,7 @@ export default function ViewRegistrationsPage() {
                     <th className="py-3 px-4 text-left">T-Shirt B</th>
                     <th className="py-3 px-4 text-left">Proof of Payment</th>
                     <th className="py-3 px-4 text-left">Flight</th>
+                    <th className="py-3 px-4 text-left">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -266,6 +275,20 @@ export default function ViewRegistrationsPage() {
                               Flight {i + 1}
                             </option>
                           ))}
+                        </select>
+                      </td>
+                      <td className="py-3 px-4">
+                        <select
+                          value={player.status || ''}
+                          onChange={(e) =>
+                            handleStatusChange(player.id, e.target.value)
+                          }
+                          className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        >
+                          <option value="">Select Status</option>
+                          <option value="Confirmed">Confirmed</option>
+                          <option value="Refunded">Refunded</option>
+                          <option value="Cancelled">Cancelled</option>
                         </select>
                       </td>
                     </tr>
