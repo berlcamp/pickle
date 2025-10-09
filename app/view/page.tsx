@@ -1,8 +1,10 @@
 'use client'
 
 import { createClient } from '@supabase/supabase-js'
+import { saveAs } from 'file-saver'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import * as XLSX from 'xlsx'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -75,6 +77,49 @@ export default function ViewRegistrationsPage() {
       setPlayers(data || [])
     }
     setLoading(false)
+  }
+
+  const handleExportExcel = () => {
+    if (players.length === 0) {
+      alert('No players to export.')
+      return
+    }
+
+    // Format data for Excel
+    const exportData = players.map((p, index) => ({
+      '#': index + 1,
+      'Player A': p.player_a,
+      'Player B': p.player_b,
+      'Contact Number': p.contact_number,
+      Address: p.address,
+      Club: p.club,
+      Category: p.category,
+      'T-Shirt Size A': p.tshirt_size_a,
+      'T-Shirt Name A': p.tshirt_name_a,
+      'T-Shirt Size B': p.tshirt_size_b,
+      'T-Shirt Name B': p.tshirt_name_b,
+      Payment: p.proof || '',
+      Flight: p.flight || '',
+      Status: p.status || ''
+    }))
+
+    // Create worksheet and workbook
+    const worksheet = XLSX.utils.json_to_sheet(exportData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, category || 'Players')
+
+    // Create Excel file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    })
+    const dataBlob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+
+    // Download
+    const fileName = `Pickleball_${category}_Registrations.xlsx`
+    saveAs(dataBlob, fileName)
   }
 
   const handleFlightChange = async (id: number, newFlight: string) => {
@@ -182,11 +227,11 @@ export default function ViewRegistrationsPage() {
           </h2>
 
           {/* Category Dropdown */}
-          <div className="flex justify-center mb-8">
+          <div className="flex flex-col md:flex-row justify-center md:justify-between items-center mb-8 gap-4">
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full border md:w-1/2 border-gray-300 rounded-lg p-3 text-gray-700"
+              className="w-full md:w-1/2 border border-gray-300 rounded-lg p-3 text-gray-700"
             >
               <option value="">Select category</option>
               {categories.map((cat, idx) => (
@@ -195,6 +240,15 @@ export default function ViewRegistrationsPage() {
                 </option>
               ))}
             </select>
+
+            {players.length > 0 && (
+              <button
+                onClick={handleExportExcel}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                Export to Excel
+              </button>
+            )}
           </div>
 
           {/* Results */}
