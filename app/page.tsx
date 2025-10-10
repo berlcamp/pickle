@@ -421,6 +421,7 @@ export default function Home() {
                           <option value="L">L</option>
                           <option value="XL">XL</option>
                           <option value="2XL">2XL</option>
+                          <option value="3XL">3XL</option>
                         </select>
                         {errors.tshirt_size_b && (
                           <div className="app__error_message">
