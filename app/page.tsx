@@ -68,6 +68,10 @@ export default function Home() {
   const [registrations, setRegistrations] = useState<FormTypes[] | []>([])
   const [viewReg, setViewReg] = useState(false)
 
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>(
+    {}
+  )
+
   const {
     register,
     formState: { errors },
@@ -84,6 +88,12 @@ export default function Home() {
   }
 
   const handleCreate = async (formdata: FormTypes) => {
+    if (isFull(formdata.category)) {
+      alert('Sorry, this category is already full.')
+      setSaving(false)
+      return
+    }
+
     let proofPath = null
 
     // 🔹 1. Upload proof of payment file if exists
@@ -146,16 +156,34 @@ export default function Home() {
     }
   }
 
+  const getRemainingSlots = (categoryName: string) => {
+    const count = categoryCounts[categoryName] || 0
+    const remaining = 20 - count
+    return remaining > 0 ? remaining : 0
+  }
+
+  const isFull = (categoryName: string) => getRemainingSlots(categoryName) === 0
+
   useEffect(() => {
     ;(async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('pickle')
-        .select()
+        .select('category')
         .eq('event', 'lopez')
 
-      if (data) {
-        setRegistrations(data)
+      if (error) {
+        console.error('Error fetching data:', error)
+        return
       }
+
+      // Count number of registrants per category
+      const counts: Record<string, number> = {}
+      data?.forEach((row) => {
+        counts[row.category] = (counts[row.category] || 0) + 1
+      })
+
+      setCategoryCounts(counts)
+      setRegistrations(data as any)
     })()
   }, [registered])
 
@@ -367,12 +395,26 @@ export default function Home() {
                           {...register('category', { required: true })}
                           className="w-full text-sm py-1 px-2 border border-gray-300 rounded-sm"
                         >
-                          <option value=""></option>
-                          {categories.map((cat, idx) => (
-                            <option key={idx} value={cat.name}>
-                              {cat.label}
-                            </option>
-                          ))}
+                          <option value="">Select Category</option>
+                          {categories.map((cat, idx) => {
+                            const remaining = getRemainingSlots(cat.name)
+                            const full = isFull(cat.name)
+                            return (
+                              <option
+                                key={idx}
+                                value={cat.name}
+                                disabled={full}
+                                className={full ? 'text-gray-400' : ''}
+                              >
+                                {cat.label} —{' '}
+                                {full
+                                  ? 'FULL'
+                                  : `${remaining} slot${
+                                      remaining > 1 ? 's' : ''
+                                    } left`}
+                              </option>
+                            )
+                          })}
                         </select>
                         {errors.category && (
                           <div className="app__error_message">
