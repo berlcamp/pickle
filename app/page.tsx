@@ -99,31 +99,62 @@ export default function Home() {
     // 🔹 1. Upload proof of payment file if exists
 
     if (formdata.proof && formdata.proof.length > 0) {
-      const file = formdata.proof[0]
+      let file = formdata.proof[0]
+
+      // Convert HEIC/WEBP to JPEG if needed
+      if (
+        !file.type.startsWith('image/jpeg') &&
+        !file.type.startsWith('image/png')
+      ) {
+        const img = await createImageBitmap(file)
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) throw new Error('Failed to get canvas context')
+        ctx.drawImage(img, 0, 0)
+        // const blob = await new Promise((resolve) =>
+        //   canvas.toBlob(resolve, 'image/jpeg', 0.9)
+        // )
+        const blob = await new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob(
+            (b) => {
+              if (b) resolve(b)
+              else reject(new Error('Canvas toBlob() failed'))
+            },
+            'image/jpeg',
+            0.9
+          )
+        })
+        file = new File([blob], file.name.replace(/\.\w+$/, '.jpg'), {
+          type: 'image/jpeg'
+        })
+      }
+
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}_${formdata.player_a
         .replace(/\s+/g, '_')
         .toLowerCase()}.${fileExt}`
       const filePath = `proofs/${fileName}`
 
-      // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
-        .from('publicbucket') // ✅ make sure this is your actual bucket name
+        .from('publicbucket')
         .upload(filePath, file, { upsert: true })
 
       if (uploadError) {
         console.error('Upload error:', uploadError)
-        alert('Error uploading proof of payment.')
+        alert(
+          'Error uploading proof of payment. Please try again or use Chrome.'
+        )
         setSaving(false)
         return
       }
 
-      // 🔹 2. Get public URL immediately
       const { data: publicUrlData } = supabase.storage
         .from('publicbucket')
         .getPublicUrl(filePath)
 
-      proofPath = publicUrlData.publicUrl // ✅ this is the public path to save
+      proofPath = publicUrlData.publicUrl
     }
 
     // 🔹 2. Insert registration record into pickle table
