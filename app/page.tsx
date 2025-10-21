@@ -195,7 +195,7 @@ export default function Home() {
   const getRemainingSlots = (categoryName: string) => {
     const count = categoryCounts[categoryName] || 0
     const limit =
-      categoryName === 'novicemen' || categoryName === 'novicemen' ? 32 : 20
+      categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
     const remaining = limit - count
     return remaining > 0 ? remaining : 0
   }
