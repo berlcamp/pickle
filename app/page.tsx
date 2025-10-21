@@ -25,10 +25,15 @@ interface FormTypes {
 }
 
 const categories = [
+  // {
+  //   name: 'novice',
+  //   label: 'Novice',
+  //   link: 'category/novice'
+  // },
   {
-    name: 'novice',
-    label: 'Novice',
-    link: 'category/novice'
+    name: 'novicemen',
+    label: 'Novice Men',
+    link: 'category/novicemen'
   },
   {
     name: 'bm',
