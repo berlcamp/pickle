@@ -25,11 +25,11 @@ interface FormTypes {
 }
 
 const categories = [
-  // {
-  //   name: 'novice',
-  //   label: 'Novice',
-  //   link: 'category/novice'
-  // },
+  {
+    name: 'novice',
+    label: 'Novice',
+    link: 'category/novice'
+  },
   {
     name: 'bm',
     label: 'Beginner Men',
@@ -189,7 +189,7 @@ export default function Home() {
 
   const getRemainingSlots = (categoryName: string) => {
     const count = categoryCounts[categoryName] || 0
-    const remaining = 20 - count
+    const remaining = 30 - count
     return remaining > 0 ? remaining : 0
   }
 
