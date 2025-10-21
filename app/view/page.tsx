@@ -30,6 +30,7 @@ interface Player {
 
 const categories = [
   { name: 'novice', label: 'Novice' },
+  { name: 'novicemen', label: 'Novice Men' },
   { name: 'bm', label: 'Beginner Men' },
   { name: 'bw', label: 'Beginner Women' },
   { name: 'bmx', label: 'Beginner Mixed' },
