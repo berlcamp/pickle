@@ -281,16 +281,16 @@ export default function Home() {
               <>
                 {/* Title */}
                 <div className="text-center space-y-8">
-                  <div className="text-3xl font-bold text-green-700">
+                  <div className="text-3xl font-bold text-black">
                     <div>1st Asenso Lopez Jaena Pickleball Tournament</div>
-                    <div className="text-base text-green-800">
+                    <div className="text-base text-gray-700">
                       November 22-23 2025
                     </div>
                   </div>
 
                   {/* Registration Fee Section */}
                   <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-xl inline-block px-6 py-4 text-sm md:text-base shadow-sm">
-                    <h2 className="text-emerald-700 font-semibold text-lg mb-2 text-center">
+                    <h2 className="text-gray-700 font-semibold text-lg mb-2 text-center">
                       Registration Fee
                     </h2>
                     <div className="grid grid-cols-1 gap-2 text-gray-700 text-left">
@@ -317,7 +317,7 @@ export default function Home() {
                         <span className="font-medium">₱1,000/player</span>
                       </div>
                     </div>
-                    <div className="mt-4 text-emerald-700 mb-2 text-center">
+                    <div className="mt-4 text-gray-700 mb-2 text-center">
                       <div>
                         You can pay through GCash:{' '}
                         <span className="font-bold">
