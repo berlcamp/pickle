@@ -30,11 +30,11 @@ const categories = [
   //   label: 'Novice',
   //   link: 'category/novice'
   // },
-  {
-    name: 'novicemen',
-    label: 'Novice Men',
-    link: 'category/novicemen'
-  },
+  // {
+  //   name: 'novicemen',
+  //   label: 'Novice Men',
+  //   link: 'category/novicemen'
+  // },
   {
     name: 'bm',
     label: 'Beginner Men',
