@@ -203,7 +203,6 @@ export default function Home() {
       categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
     limit = categoryName === 'imx' ? 12 : limit
     if (
-      categoryName === 'im' ||
       categoryName === 'bw' ||
       categoryName === 'novicemen' ||
       categoryName === 'novice'
