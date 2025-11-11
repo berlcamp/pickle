@@ -61,6 +61,11 @@ const categories = [
     link: 'category/iw'
   },
   {
+    name: 'imx',
+    label: 'Intermediate Mixed',
+    link: 'category/imx'
+  },
+  {
     name: 'open',
     label: 'Open',
     link: 'category/open'
@@ -194,8 +199,9 @@ export default function Home() {
 
   const getRemainingSlots = (categoryName: string) => {
     const count = categoryCounts[categoryName] || 0
-    const limit =
+    let limit =
       categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
+    limit = categoryName === 'imx' ? 20 : limit
     const remaining = limit - count
     return remaining > 0 ? remaining : 0
   }

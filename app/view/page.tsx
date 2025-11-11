@@ -36,6 +36,7 @@ const categories = [
   { name: 'bmx', label: 'Beginner Mixed' },
   { name: 'im', label: 'Intermediate Men' },
   { name: 'iw', label: 'Intermediate Women' },
+  { name: 'imx', label: 'Intermediate Mixed' },
   { name: 'open', label: 'Open' }
 ]
 
