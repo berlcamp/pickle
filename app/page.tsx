@@ -25,26 +25,26 @@ interface FormTypes {
 }
 
 const categories = [
-  // {
-  //   name: 'novice',
-  //   label: 'Novice',
-  //   link: 'category/novice'
-  // },
-  // {
-  //   name: 'novicemen',
-  //   label: 'Novice Men',
-  //   link: 'category/novicemen'
-  // },
+  {
+    name: 'novice',
+    label: 'Novice', // Full
+    link: 'category/novice'
+  },
+  {
+    name: 'novicemen',
+    label: 'Novice Men', // Full
+    link: 'category/novicemen'
+  },
   {
     name: 'bm',
     label: 'Beginner Men',
     link: 'category/bm'
   },
-  // {
-  //   name: 'bw',
-  //   label: 'Beginner Women',
-  //   link: 'category/bw'
-  // },
+  {
+    name: 'bw',
+    label: 'Beginner Women', //full
+    link: 'category/bw'
+  },
   {
     name: 'bmx',
     label: 'Beginner Mixed',
@@ -202,6 +202,14 @@ export default function Home() {
     let limit =
       categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
     limit = categoryName === 'imx' ? 12 : limit
+    if (
+      categoryName === 'im' ||
+      categoryName === 'bw' ||
+      categoryName === 'novicemen' ||
+      categoryName === 'novice'
+    ) {
+      limit = 0
+    }
     const remaining = limit - count
     return remaining > 0 ? remaining : 0
   }
