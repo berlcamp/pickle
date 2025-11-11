@@ -201,7 +201,7 @@ export default function Home() {
     const count = categoryCounts[categoryName] || 0
     let limit =
       categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
-    limit = categoryName === 'imx' ? 20 : limit
+    limit = categoryName === 'imx' ? 12 : limit
     const remaining = limit - count
     return remaining > 0 ? remaining : 0
   }
