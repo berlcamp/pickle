@@ -202,14 +202,15 @@ export default function Home() {
     let limit =
       categoryName === 'novicemen' || categoryName === 'novicemen' ? 20 : 20
     limit = categoryName === 'imx' ? 12 : limit
-    if (
-      categoryName === 'im' ||
-      categoryName === 'bw' ||
-      categoryName === 'novicemen' ||
-      categoryName === 'novice'
-    ) {
-      limit = 0
-    }
+    // if (
+    //   categoryName === 'im' ||
+    //   categoryName === 'bw' ||
+    //   categoryName === 'novicemen' ||
+    //   categoryName === 'novice'
+    // ) {
+    //   limit = 0
+    // }
+    limit = 0
     const remaining = limit - count
     return remaining > 0 ? remaining : 0
   }
@@ -347,10 +348,10 @@ export default function Home() {
                 </div>
 
                 <div className="my-6 font-mono text-center text-lg">
-                  Register your team below:
+                  Registration is currently closed.
                 </div>
 
-                <div className="font-mono">
+                <div className="font-mono hidden">
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col space-y-6">
                       {/* Player A */}
