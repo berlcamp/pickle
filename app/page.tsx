@@ -55,7 +55,7 @@ export default function CategoriesPage() {
     const value = e.target.value
     setSelected(value)
     if (value) {
-      window.open(value, '_blank', 'noopener,noreferrer')
+      window.open(value, '_self', 'noopener,noreferrer')
     }
   }
 
