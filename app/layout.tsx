@@ -22,7 +22,7 @@ export default function RootLayout({
         <meta name="twitter:image" content="/banner.jpeg" />
         {/* Add more meta tags as needed */}
       </Head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-[#000]`}>{children}</body>
     </html>
   )
 }
