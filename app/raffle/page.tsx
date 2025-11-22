@@ -175,7 +175,7 @@ const RaffleApp: React.FC = () => {
   }
 
   return (
-    <div className="bg-[url('/banner.jpeg')] bg-cover bg-top bg-no-repeat h-screen">
+    <div className="h-screen">
       <div className="flex flex-col items-center pt-20">
         <div className="pb-10 flex flex-col items-center w-[850px] bg-black bg-opacity-80 rounded-xl">
           <div className="pt-4 rounded-full relative h-full w-11/12 overflow-hidden">
@@ -191,14 +191,14 @@ const RaffleApp: React.FC = () => {
                     index === 3
                       ? `text-3xl my-1 py-2 w-full font-bold ${
                           pauseShuffling || currentWinners.length >= numWinners
-                            ? 'text-gray-800 bg-gradient-to-b from-blue-300 to-white'
-                            : 'bg-gradient-to-b from-blue-300 to-blue-500 text-white'
+                            ? 'text-gray-800 bg-gradient-to-b from-orange-300 to-white'
+                            : 'bg-gradient-to-b from-orange-300 to-orange-500 text-white'
                         }` // Center name
                       : index === 2 || index === 4
-                      ? 'bg-gradient-to-b from-blue-900 to-blue-500 text-white text-xl my-1 py-1 w-10/12' // Adjacent names
+                      ? 'bg-gradient-to-b from-orange-900 to-orange-500 text-white text-xl my-1 py-1 w-10/12' // Adjacent names
                       : index === 1 || index === 5
-                      ? 'bg-gradient-to-b from-blue-900 to-blue-700 text-gray-300 w-3/5 text-sm py-px my-px' // Second row from center
-                      : 'bg-gradient-to-b from-blue-900 to-blue-700 text-gray-300 w-2/5 text-xs py-px my-px' // Outer names
+                      ? 'bg-gradient-to-b from-orange-900 to-orange-700 text-gray-300 w-3/5 text-sm py-px my-px' // Second row from center
+                      : 'bg-gradient-to-b from-orange-900 to-orange-700 text-gray-300 w-2/5 text-xs py-px my-px' // Outer names
                   }`}
                 >
                   {index === 3 && (
